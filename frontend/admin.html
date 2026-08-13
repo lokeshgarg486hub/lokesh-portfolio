@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Executive Admin Command Center — Lokesh Portfolio</title>
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" />
+    <!-- Chart.js via CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+        
+        :root {
+            --admin-bg: #08070d;
+            --admin-surface: rgba(16, 15, 23, 0.95);
+            --admin-surface-hover: rgba(235, 93, 58, 0.08);
+            --admin-border: rgba(255, 255, 255, 0.09);
+            --admin-accent: #eb5d3a;
+            --admin-accent-glow: rgba(235, 93, 58, 0.25);
+            --admin-text: #9ca3af;
+            --admin-text-bright: #f9fafb;
+        }
+
+        body { background: var(--admin-bg); color: var(--admin-text); font-family: "Plus Jakarta Sans", sans-serif; min-height: 100vh; }
+        #login-view { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle at center, rgba(235,93,58,0.08) 0%, rgba(8,7,13,1) 80%); }
+        #dashboard-view { display: none; }
+        
+        .sidebar {
+            background: var(--admin-surface);
+            border-right: 1px solid var(--admin-border);
+            min-height: 100vh;
+            padding-top: 24px;
+        }
+        .sidebar-brand {
+            padding: 0 20px 20px;
+            border-bottom: 1px solid var(--admin-border);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .sidebar .nav-link {
+            color: #a1a1aa;
+            padding: 11px 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .sidebar .nav-link:hover {
+            color: var(--admin-text-bright);
+            background: var(--admin-surface-hover);
+        }
+        .sidebar .nav-link.active {
+            color: var(--admin-text-bright);
+            background: linear-gradient(90deg, rgba(235,93,58,0.15) 0%, rgba(235,93,58,0.02) 100%);
+            border-left-color: var(--admin-accent);
+            font-weight: 600;
+        }
+        .sidebar .nav-link i { font-size: 17px; }
+        
+        .tab-section { display: none; }
+        .tab-section.active { display: block; }
+
+        .modal-backdrop-custom {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px);
+            z-index: 1040; display: flex; align-items: center; justify-content: center;
+        }
+        .modal-box {
+            background: #111018; border-radius: 16px;
+            padding: 30px; width: 680px; max-width: 95vw; max-height: 90vh; overflow-y: auto; color: var(--admin-text-bright); border: 1px solid rgba(235,93,58,0.3);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+        }
+        .login-card {
+            background: #111018; border-radius: 20px; padding: 44px; box-shadow: 0 20px 40px rgba(0,0,0,0.6); max-width: 440px; width: 100%; color: var(--admin-text-bright); border: 1px solid rgba(235,93,58,0.3);
+        }
+        .card { background: #111018; border: 1px solid var(--admin-border); border-radius: 14px; overflow: hidden; }
+        .table { color: var(--admin-text); margin-bottom: 0; }
+        .table-hover tbody tr:hover { color: var(--admin-text-bright); background-color: rgba(235,93,58,0.06); }
+        .table-dark { background-color: #171520; }
+        .table-dark th { border-bottom-color: var(--admin-border); color: var(--admin-text-bright); font-weight: 600; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; }
+        td { vertical-align: middle; padding: 14px 16px; }
+        h4, h2, h5, h3 { color: var(--admin-text-bright); font-family: "Outfit", sans-serif; font-weight: 700; }
+        
+        .form-label { color: var(--admin-text-bright); font-weight: 500; font-size: 13.5px; }
+        .form-control, .form-select { background-color: rgba(255,255,255,0.04); border: 1px solid var(--admin-border); color: var(--admin-text-bright); border-radius: 8px; padding: 10px 14px; }
+        .form-control:focus, .form-select:focus { background-color: rgba(255,255,255,0.06); border-color: var(--admin-accent); color: var(--admin-text-bright); box-shadow: 0 0 0 0.25rem var(--admin-accent-glow); }
+        
+        .btn-dark, .btn-primary { background: var(--admin-accent); border-color: var(--admin-accent); color: #fff; font-weight: 600; border-radius: 8px; }
+        .btn-dark:hover, .btn-primary:hover { background: #d64d2b; border-color: #d64d2b; color: #fff; }
+        .btn-success { background: var(--admin-accent); border-color: var(--admin-accent); color: #fff; font-weight: 600; }
+        .btn-success:hover { background: #d64d2b; border-color: #d64d2b; }
+        .btn-outline-secondary { color: var(--admin-text); border-color: var(--admin-border); }
+        .btn-outline-secondary:hover { background-color: rgba(255,255,255,0.08); color: var(--admin-text-bright); }
+        
+        .analytics-stat-card { background: #111018; border: 1px solid var(--admin-border); border-radius: 14px; padding: 22px; text-align: center; }
+        .analytics-stat-card .stat-number { font-size: 2.4rem; font-weight: 800; color: var(--admin-accent); font-family: "Outfit", sans-serif; }
+        .analytics-stat-card .stat-label { font-size: 13px; color: var(--admin-text); font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px; }
+        .badge-status { padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+        .badge-status.active { background: rgba(16,185,129,0.15); color: #10b981; border: 1px solid rgba(16,185,129,0.3); }
+        .badge-status.draft { background: rgba(245,158,11,0.15); color: #f59e0b; border: 1px solid rgba(245,158,11,0.3); }
+    </style>
+</head>
+<body>
+
+<!-- ==================== LOGIN VIEW ==================== -->
+<div id="login-view">
+    <div class="login-card">
+        <div class="text-center mb-4">
+            <h2 class="fw-bold mb-1">Admin <span style="color:var(--admin-accent);">Command Center</span></h2>
+            <p class="text-muted" style="font-size:14px;">Lokesh Portfolio Management Portal</p>
+        </div>
+        <form id="login-form">
+            <div class="mb-3">
+                <label class="form-label">Username</label>
+                <input type="text" id="username" name="username" class="form-control" placeholder="admin" required>
+            </div>
+            <div class="mb-4">
+                <label class="form-label">Password</label>
+                <input type="password" id="password" name="password" class="form-control" placeholder="••••••••" required>
+            </div>
+            <button type="submit" class="btn btn-dark w-100 py-2">Login to Admin <i class="ri-login-box-line ms-1"></i></button>
+        </form>
+        <p id="login-error" class="text-danger text-center mt-3" style="display:none;">
+            <i class="ri-error-warning-line"></i> Invalid credentials. Please try again.
+        </p>
+    </div>
+</div>
+
+<!-- ==================== DASHBOARD VIEW ==================== -->
+<div class="container-fluid" id="dashboard-view">
+    <div class="row g-0">
+
+        <!-- Sidebar Navigation -->
+        <nav class="col-md-2 sidebar">
+            <div class="sidebar-brand">
+                <i class="ri-shield-flash-line" style="font-size:24px; color:var(--admin-accent);"></i>
+                <h5 class="mb-0 fw-bold">Admin Portal</h5>
+            </div>
+            <ul class="nav flex-column mt-3">
+                <li class="nav-item"><a class="nav-link active" onclick="showTab('custom-domain')"><i class="ri-global-line"></i>Custom Domain</a></li>
+                <li class="nav-item"><a class="nav-link" onclick="showTab('blogs')"><i class="ri-article-line"></i>Blogs Engine</a></li>
+                <li class="nav-item"><a class="nav-link" onclick="showTab('domains')"><i class="ri-focus-line"></i>Work Domains</a></li>
+                <li class="nav-item"><a class="nav-link" onclick="showTab('projects')"><i class="ri-folder-chart-line"></i>Projects</a></li>
+                <li class="nav-item"><a class="nav-link" onclick="showTab('skills')"><i class="ri-code-s-slash-line"></i>Skills Matrix</a></li>
+                <li class="nav-item"><a class="nav-link" onclick="showTab('certificates')"><i class="ri-medal-line"></i>Certificates</a></li>
+                <li class="nav-item"><a class="nav-link" onclick="showTab('internships')"><i class="ri-briefcase-line"></i>Internships</a></li>
+                <li class="nav-item"><a class="nav-link" onclick="showTab('testimonials')"><i class="ri-chat-quote-line"></i>Testimonials</a></li>
+                <li class="nav-item"><a class="nav-link" onclick="showTab('education')"><i class="ri-graduation-cap-line"></i>Education</a></li>
+                <li class="nav-item"><a class="nav-link" onclick="showTab('social')"><i class="ri-share-line"></i>Social Links</a></li>
+                <li class="nav-item"><a class="nav-link" onclick="showTab('profile')"><i class="ri-user-line"></i>Profile Bio</a></li>
+                <li class="nav-item"><a class="nav-link" onclick="showTab('messages')"><i class="ri-mail-line"></i>Inbox Messages</a></li>
+                <li class="nav-item"><a class="nav-link" onclick="showTab('analytics')"><i class="ri-bar-chart-line"></i>Analytics</a></li>
+            </ul>
+            <div class="px-3 mt-4 mb-4">
+                <button class="btn btn-sm btn-outline-secondary w-100" id="logout-btn"><i class="ri-logout-box-line me-1"></i> Logout Admin</button>
+            </div>
+        </nav>
+
+        <!-- Main Workspace -->
+        <main class="col-md-10 p-4">
+
+            <!-- CUSTOM DOMAIN TAB -->
+            <div id="tab-custom-domain" class="tab-section active">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h4 class="mb-1">Custom Domain &amp; Site Configuration</h4>
+                        <p class="text-muted mb-0" style="font-size:14px;">Manage custom domain name, canonical URL, DNS status, and SEO defaults.</p>
+                    </div>
+                    <span class="badge-status active"><i class="ri-checkbox-circle-line me-1"></i> Domain Active</span>
+                </div>
+
+                <div class="card mb-4" style="background: linear-gradient(135deg, rgba(235,93,58,0.1) 0%, rgba(17,16,24,0.9) 100%); border-color: rgba(235,93,58,0.3);">
+                    <div class="card-body p-4">
+                        <h5 class="mb-3"><i class="ri-global-line me-2" style="color:var(--admin-accent);"></i>Custom Domain Setup Wizard</h5>
+                        <p style="font-size:14px; color:var(--admin-text);" class="mb-3">
+                            Connect your custom domain (e.g. <code>lokeshgarg.dev</code> or <code>lokesh-portfolio.com</code>) by setting your domain name below and adding a CNAME record in your domain registrar (GoDaddy, Namecheap, Cloudflare).
+                        </p>
+                        
+                        <form id="domain-settings-form">
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Custom Domain Name</label>
+                                    <input type="text" id="ds-domain" name="custom_domain" class="form-control" placeholder="e.g. lokesh-garg.dev">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Canonical Site URL</label>
+                                    <input type="text" id="ds-canonical" name="canonical_url" class="form-control" placeholder="https://lokesh-portfolio.vercel.app">
+                                </div>
+                            </div>
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Site Title (Browser Tab)</label>
+                                    <input type="text" id="ds-title" name="site_title" class="form-control">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">CNAME Target Record</label>
+                                    <input type="text" id="ds-cname" name="cname_target" class="form-control" readonly value="cname.vercel-dns.com">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Default Meta SEO Description</label>
+                                <textarea id="ds-seo" name="seo_description" class="form-control" rows="2"></textarea>
+                            </div>
+                            <div class="d-flex align-items-center gap-3">
+                                <button type="submit" class="btn btn-dark"><i class="ri-save-line me-1"></i> Save Domain Settings</button>
+                                <span id="domain-save-msg" class="text-success small" style="display:none;">✅ Settings saved!</span>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- DNS Record Help Box -->
+                <div class="card">
+                    <div class="card-body p-4">
+                        <h5 class="mb-3"><i class="ri-information-line me-2" style="color:var(--admin-accent);"></i>DNS Record Configuration Guide</h5>
+                        <table class="table table-bordered table-dark text-start">
+                            <thead>
+                                <tr><th>Type</th><th>Name / Host</th><th>Target Value</th><th>TTL</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>CNAME</code></td>
+                                    <td><code>@</code> or <code>www</code></td>
+                                    <td><code>cname.vercel-dns.com</code></td>
+                                    <td>Automatic / 3600</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BLOGS TAB -->
+            <div id="tab-blogs" class="tab-section">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h4 class="mb-1">Blogs &amp; Articles Manager</h4>
+                        <p class="text-muted mb-0" style="font-size:14px;">Publish, edit, and organize portfolio engineering articles.</p>
+                    </div>
+                    <button class="btn btn-success btn-sm" onclick="openAddModal('blog')"><i class="ri-add-line me-1"></i> Create Blog Post</button>
+                </div>
+
+                <div class="card">
+                    <div class="card-body p-0">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Category</th>
+                                    <th>Read Time</th>
+                                    <th>Views</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="list-blogs"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DOMAINS TAB -->
+            <div id="tab-domains" class="tab-section">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4>Manage Work Domains</h4>
+                    <button class="btn btn-success btn-sm" onclick="openAddModal('domain')"><i class="ri-add-line"></i> Add Domain</button>
+                </div>
+                <div class="card"><div class="card-body p-0">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-dark"><tr><th>Title</th><th>Description</th><th>Icon Class</th><th>Actions</th></tr></thead>
+                        <tbody id="list-domains"></tbody>
+                    </table>
+                </div></div>
+            </div>
+
+            <!-- PROJECTS TAB -->
+            <div id="tab-projects" class="tab-section">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4>All Projects</h4>
+                    <button class="btn btn-success btn-sm" onclick="openAddModal('project')"><i class="ri-add-line"></i> Add Project</button>
+                </div>
+                <div class="card"><div class="card-body p-0">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-dark"><tr><th>Title</th><th>Domain</th><th>Featured</th><th>Links</th><th>Actions</th></tr></thead>
+                        <tbody id="list-projects"></tbody>
+                    </table>
+                </div></div>
+            </div>
+
+            <!-- SKILLS TAB -->
+            <div id="tab-skills" class="tab-section">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4>Skills Matrix</h4>
+                    <button class="btn btn-success btn-sm" onclick="openAddModal('skill')"><i class="ri-add-line"></i> Add Skill</button>
+                </div>
+                <div class="card"><div class="card-body p-0">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-dark"><tr><th>Name</th><th>Proficiency</th><th>Domain</th><th>Actions</th></tr></thead>
+                        <tbody id="list-skills"></tbody>
+                    </table>
+                </div></div>
+            </div>
+
+            <!-- CERTIFICATES TAB -->
+            <div id="tab-certificates" class="tab-section">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4>All Certificates</h4>
+                    <button class="btn btn-success btn-sm" onclick="openAddModal('certificate')"><i class="ri-add-line"></i> Add Certificate</button>
+                </div>
+                <div class="card"><div class="card-body p-0">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-dark"><tr><th>Title</th><th>Issuer</th><th>Date</th><th>Domain</th><th>Actions</th></tr></thead>
+                        <tbody id="list-certificates"></tbody>
+                    </table>
+                </div></div>
+            </div>
+
+            <!-- INTERNSHIPS TAB -->
+            <div id="tab-internships" class="tab-section">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4>All Internships</h4>
+                    <button class="btn btn-success btn-sm" onclick="openAddModal('internship')"><i class="ri-add-line"></i> Add Internship</button>
+                </div>
+                <div class="card"><div class="card-body p-0">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-dark"><tr><th>Role</th><th>Company</th><th>Duration</th><th>Domain</th><th>Actions</th></tr></thead>
+                        <tbody id="list-internships"></tbody>
+                    </table>
+                </div></div>
+            </div>
+
+            <!-- TESTIMONIALS TAB -->
+            <div id="tab-testimonials" class="tab-section">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4>Testimonials</h4>
+                    <button class="btn btn-success btn-sm" onclick="openAddModal('testimonial')"><i class="ri-add-line"></i> Add Testimonial</button>
+                </div>
+                <div class="card"><div class="card-body p-0">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-dark"><tr><th>Author</th><th>Role</th><th>Quote</th><th>Actions</th></tr></thead>
+                        <tbody id="list-testimonials"></tbody>
+                    </table>
+                </div></div>
+            </div>
+
+            <!-- EDUCATION TAB -->
+            <div id="tab-education" class="tab-section">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4>Education</h4>
+                    <button class="btn btn-success btn-sm" onclick="openAddModal('education')"><i class="ri-add-line"></i> Add Education</button>
+                </div>
+                <div class="card"><div class="card-body p-0">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-dark"><tr><th>Institution</th><th>Degree</th><th>Dates</th><th>GPA</th><th>Actions</th></tr></thead>
+                        <tbody id="list-education"></tbody>
+                    </table>
+                </div></div>
+            </div>
+
+            <!-- SOCIAL LINKS TAB -->
+            <div id="tab-social" class="tab-section">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4>Manage Social Links</h4>
+                    <button class="btn btn-success btn-sm" onclick="openAddModal('social')"><i class="ri-add-line"></i> Add Link</button>
+                </div>
+                <div class="card"><div class="card-body p-0">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-dark"><tr><th>Platform</th><th>URL</th><th>Icon Class</th><th>Actions</th></tr></thead>
+                        <tbody id="list-social"></tbody>
+                    </table>
+                </div></div>
+            </div>
+
+            <!-- PROFILE TAB -->
+            <div id="tab-profile" class="tab-section">
+                <h4 class="mb-3">Edit Profile Bio &amp; Avatar</h4>
+                <div class="card"><div class="card-body p-4">
+                    <form id="profile-form">
+                        <div class="mb-3"><label class="form-label">Name</label><input type="text" name="name" id="p-name" class="form-control"></div>
+                        <div class="mb-3"><label class="form-label">Tagline</label><input type="text" name="tagline" id="p-tagline" class="form-control"></div>
+                        <div class="mb-3"><label class="form-label">Location</label><input type="text" name="location" id="p-location" class="form-control"></div>
+                        <div class="mb-3"><label class="form-label">Bio Description</label><textarea name="bio" id="p-bio" class="form-control" rows="4"></textarea></div>
+                        <div class="mb-3">
+                            <label class="form-label">Profile Photo URL</label>
+                            <input type="file" id="p-photo-file" class="form-control mb-1" accept="image/*">
+                            <input type="text" name="profile_photo_url" id="p-photo" class="form-control" placeholder="Or paste image URL">
+                        </div>
+                        <div class="mb-3"><label class="form-label">Resume URL</label><input type="text" name="resume_url" id="p-resume" class="form-control"></div>
+                        <div class="mb-4 form-check">
+                            <input type="checkbox" name="available_for_freelance" id="p-freelance" class="form-check-input">
+                            <label class="form-check-label" for="p-freelance">Available for Freelancing Badge</label>
+                        </div>
+                        <button type="submit" class="btn btn-dark">Save Profile <i class="ri-save-line ms-1"></i></button>
+                        <span id="profile-save-msg" class="ms-3 text-success small" style="display:none;">✅ Saved!</span>
+                    </form>
+                </div></div>
+            </div>
+
+            <!-- MESSAGES TAB -->
+            <div id="tab-messages" class="tab-section">
+                <h4 class="mb-3">Contact Messages Inbox</h4>
+                <div class="card"><div class="card-body p-0">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-dark"><tr><th>Name</th><th>Email</th><th>Subject</th><th>Message</th><th>Date</th><th>Status</th></tr></thead>
+                        <tbody id="list-messages"></tbody>
+                    </table>
+                </div></div>
+            </div>
+
+            <!-- ANALYTICS TAB -->
+            <div id="tab-analytics" class="tab-section">
+                <h4 class="mb-4">Visitor Analytics (Last 30 Days)</h4>
+                
+                <div class="row g-3 mb-4">
+                    <div class="col-md-3">
+                        <div class="analytics-stat-card">
+                            <div class="stat-number" id="analytics-today-views">—</div>
+                            <div class="stat-label">Page Views Today</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="analytics-stat-card">
+                            <div class="stat-number" id="analytics-today-cv">—</div>
+                            <div class="stat-label">CV Downloads Today</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-body p-4">
+                        <h5 class="mb-3">Page Views (last 30 days)</h5>
+                        <canvas id="chart-page-views" height="120"></canvas>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-body p-4">
+                        <h5 class="mb-3">CV Downloads (last 30 days)</h5>
+                        <canvas id="chart-cv-downloads" height="120"></canvas>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+</div>
+
+<!-- ==================== ADD/EDIT MODAL ==================== -->
+<div id="form-modal" class="modal-backdrop-custom" style="display:none;">
+    <div class="modal-box">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 id="modal-title" class="mb-0">Add Item</h5>
+            <button class="btn btn-sm btn-outline-secondary" onclick="closeModal()">✕</button>
+        </div>
+        <form id="modal-form">
+            <div id="modal-fields"></div>
+            <div class="d-flex gap-2 mt-4">
+                <button type="submit" class="btn btn-dark">Save <i class="ri-save-line ms-1"></i></button>
+                <button type="button" class="btn btn-outline-secondary" onclick="closeModal()">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- ==================== REPLY MODAL ==================== -->
+<div id="reply-modal" class="modal-backdrop-custom" style="display:none;">
+    <div class="modal-box">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="mb-0"><i class="ri-mail-send-line me-2"></i>Reply to Message</h5>
+            <button class="btn btn-sm btn-outline-secondary" onclick="closeReplyModal()">✕</button>
+        </div>
+        <form id="reply-form">
+            <div class="mb-3">
+                <label class="form-label">To Email</label>
+                <input type="email" id="reply-to" class="form-control" readonly>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Subject</label>
+                <input type="text" id="reply-subject" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Email Body</label>
+                <textarea id="reply-body" class="form-control" rows="6" placeholder="Type your reply message..." required></textarea>
+            </div>
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-dark">Send Email Reply <i class="ri-send-plane-line ms-1"></i></button>
+                <button type="button" class="btn btn-outline-secondary" onclick="closeReplyModal()">Cancel</button>
+            </div>
+            <p id="reply-status" class="mt-2 small"></p>
+        </form>
+    </div>
+</div>
+
+<script src="js/admin.js"></script>
+</body>
+</html>

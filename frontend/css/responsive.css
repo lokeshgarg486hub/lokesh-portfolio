@@ -1,0 +1,89 @@
+/* ==========================================================================
+   LOKESH GARG — RESPONSIVE STYLES (responsive.css)
+   ========================================================================== */
+
+/* ── Tablet (≤ 1024px) ───────────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+    :root {
+        --section-y: 88px;
+        --card-p:    24px;
+        --gap:       24px;
+    }
+
+    .grid-3,
+    .grid-4 { grid-template-columns: repeat(2, 1fr); }
+
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    .footer-brand { grid-column: 1 / -1; }
+}
+
+/* ── Mobile (≤ 768px) ────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+    :root {
+        --section-y: 72px;
+        --card-p:    22px;
+        --gap:       20px;
+    }
+
+    h1 { font-size: 36px; letter-spacing: -1px; }
+    h2 { font-size: 28px; }
+    h3 { font-size: 20px; }
+    p  { font-size: 15.5px; }
+
+    /* Navbar: collapse to drawer */
+    .hide-on-mobile { display: none !important; }
+
+    .mobile-menu-toggle { display: block; }
+
+    .nav-menu {
+        position: fixed;
+        top: 0; right: -100%;
+        width: min(82%, 320px);
+        height: 100vh;
+        background: rgba(12,11,11,0.97);
+        backdrop-filter: blur(28px);
+        -webkit-backdrop-filter: blur(28px);
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 90px 32px 36px;
+        gap: 22px;
+        border-left: 1px solid var(--border);
+        z-index: 998;
+        transition: right 280ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .nav-menu.active { right: 0; }
+
+    /* 2-col grids collapse to 1 */
+    .grid-2 { grid-template-columns: 1fr; }
+
+    /* Hero two-column */
+    .hero-cols { grid-template-columns: 1fr !important; }
+    .hero-photo-col { order: -1; }
+
+    /* Section sub text */
+    .section-sub { font-size: 15px; }
+
+    /* Footer */
+    .footer-grid { grid-template-columns: 1fr; }
+    .footer-bottom { flex-direction: column; gap: 6px; text-align: center; }
+}
+
+/* ── Small Mobile (≤ 480px) ──────────────────────────────────────────────── */
+@media (max-width: 480px) {
+    :root {
+        --section-y: 60px;
+        --card-p:    18px;
+        --gap:       16px;
+    }
+
+    .container { padding: 0 16px; }
+
+    h1 { font-size: 30px; }
+    h2 { font-size: 24px; }
+
+    .btn-primary,
+    .btn-secondary { font-size: 14px; padding: 11px 20px; }
+
+    .grid-3,
+    .grid-4 { grid-template-columns: 1fr; }
+}

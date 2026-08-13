@@ -1,0 +1,109 @@
+/* ==========================================================================
+   LOKESH GARG PORTFOLIO — UTILITIES (utilities.css)
+   
+   Purpose: Extra utilities and responsive overrides that EXTEND theme.css.
+   Do NOT duplicate anything already defined in theme.css here.
+   All CSS variable names match :root definitions in theme.css.
+   ========================================================================== */
+
+
+/* ── Responsive Grid Breakpoints ─────────────────────────────────────────── */
+/* These extend the base grid classes defined in theme.css                   */
+
+/* Tablet: 3-col and 4-col grids drop to 2 columns */
+@media (max-width: 1024px) {
+    .grid-3,
+    .grid-4 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Mobile: all grids go single column */
+@media (max-width: 640px) {
+    .grid-2,
+    .grid-3,
+    .grid-4 {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* ── Mobile Drawer Navigation ────────────────────────────────────────────── */
+/* The drawer slides in from the right on mobile screens                     */
+
+@media (max-width: 900px) {
+    /* Show the hamburger icon only on small screens */
+    .mobile-menu-toggle {
+        display: block;
+    }
+
+    /* Nav menu becomes a full-height side drawer */
+    .nav-menu {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 80%;
+        max-width: 320px;
+        height: 100vh;
+        background: rgba(12, 11, 11, 0.96);
+        backdrop-filter: blur(24px);
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 80px 32px 32px 32px;
+        gap: 24px;
+        border-left: 1px solid var(--border);     /* uses theme.css token */
+        transition: right 300ms cubic-bezier(0.16, 1, 0.3, 1);
+        z-index: 999;
+    }
+
+    /* When JS adds .active, drawer slides into view */
+    .nav-menu.active {
+        right: 0;
+    }
+}
+
+
+/* ── Text Alignment Utilities ────────────────────────────────────────────── */
+.text-center { text-align: center; }
+.text-left   { text-align: left;   }
+.text-right  { text-align: right;  }
+
+
+/* ── Spacing Helpers ─────────────────────────────────────────────────────── */
+/* Quick margin/padding shortcuts used throughout page layouts               */
+.mt-8  { margin-top: 8px;  }
+.mt-16 { margin-top: 16px; }
+.mt-24 { margin-top: 24px; }
+.mt-32 { margin-top: 32px; }
+.mt-48 { margin-top: 48px; }
+.mb-8  { margin-bottom: 8px;  }
+.mb-16 { margin-bottom: 16px; }
+.mb-24 { margin-bottom: 24px; }
+.mb-32 { margin-bottom: 32px; }
+
+
+/* ── Display Utilities ───────────────────────────────────────────────────── */
+.d-none   { display: none; }
+.d-block  { display: block; }
+.d-flex   { display: flex; }
+.d-inline { display: inline; }
+
+
+/* ── Width Utilities ─────────────────────────────────────────────────────── */
+.w-full  { width: 100%; }
+.w-auto  { width: auto; }
+.mw-640  { max-width: 640px; }
+.mw-720  { max-width: 720px; }
+.mw-960  { max-width: 960px; }
+
+
+/* ── Overflow ────────────────────────────────────────────────────────────── */
+.overflow-hidden { overflow: hidden; }
+
+
+/* ── Position Helpers ────────────────────────────────────────────────────── */
+.relative { position: relative; }
+
+
+/* ── Cursor ──────────────────────────────────────────────────────────────── */
+.cursor-pointer { cursor: pointer; }

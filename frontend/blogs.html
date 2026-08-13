@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blogs & Technical Articles — Lokesh Kumar Garg</title>
+    <meta name="description" content="Read articles, technical tutorials, and insights on AI Engineering, RAG Architectures, Agentic AI, and Full-Stack Development by Lokesh Kumar Garg.">
+    <meta property="og:title" content="Blogs & Insights — Lokesh Kumar Garg">
+    <meta property="og:description" content="Technical notes, system architecture deep-dives, and AI engineering insights.">
+    
+    <link rel="icon" type="image/png" href="assets/images/favicon.png">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css">
+    <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/utilities.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body data-page="blogs">
+
+<div class="unique-hero-glow"></div>
+
+<!-- ══════════════════════════════ HEADER ══════════════════════════════════ -->
+<div id="main-header"></div>
+
+<!-- ══════════════════════════════ BLOG HERO ═══════════════════════════════ -->
+<section class="section-pad page-top" id="blogs-hero">
+    <div class="container text-center reveal">
+        <div class="hero-accent-badge">
+            <i class="ri-article-line"></i> Insights & Tech Writings
+        </div>
+        <h1 style="margin-bottom: 16px;">
+            Engineering <span class="orange-gradient-text">Blogs &amp; Notes</span>
+        </h1>
+        <p style="font-size: 18px; color: var(--text-muted); max-width: 680px; margin: 0 auto 36px; line-height: 1.6;">
+            Deep dives into Agentic AI, RAG architecture, LLM fine-tuning, web development, and cloud scalability.
+        </p>
+
+        <!-- Search & Filter Bar -->
+        <div style="max-width: 640px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px;">
+            <div class="glass-card" style="padding: 8px 16px; display: flex; align-items: center; gap: 12px; border-radius: 50px; border: 1px solid var(--border-glow);">
+                <i class="ri-search-line" style="font-size: 20px; color: var(--orange);"></i>
+                <input type="text" id="blog-search-input" placeholder="Search articles by title, topic, or tech tag..." style="background: transparent; border: none; outline: none; color: var(--text-white); font-size: 15px; width: 100%;">
+                <button id="blog-search-btn" class="btn-primary" style="padding: 8px 18px; border-radius: 30px; font-size: 13.5px;">Search</button>
+            </div>
+
+            <!-- Category Pills -->
+            <div class="flex-center" style="gap: 8px; flex-wrap: wrap;" id="blog-category-pills">
+                <button class="blog-category-pill btn-secondary active" data-cat="all" style="padding: 6px 16px; border-radius: 20px; font-size: 13px;">All Posts</button>
+                <button class="blog-category-pill btn-secondary" data-cat="AI & ML" style="padding: 6px 16px; border-radius: 20px; font-size: 13px;">AI &amp; ML</button>
+                <button class="blog-category-pill btn-secondary" data-cat="Web Dev" style="padding: 6px 16px; border-radius: 20px; font-size: 13px;">Web Dev</button>
+                <button class="blog-category-pill btn-secondary" data-cat="Cloud & Systems" style="padding: 6px 16px; border-radius: 20px; font-size: 13px;">Cloud &amp; Systems</button>
+                <button class="blog-category-pill btn-secondary" data-cat="Data Science" style="padding: 6px 16px; border-radius: 20px; font-size: 13px;">Data Science</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ════════════════════════════ FEATURED SPOTLIGHT ════════════════════════ -->
+<section class="section-pad-sm" id="featured-blog-spotlight" style="display: none;">
+    <div class="container">
+        <div id="spotlight-card-container"></div>
+    </div>
+</section>
+
+<!-- ════════════════════════════ BLOG POSTS GRID ═══════════════════════════ -->
+<section class="section-pad" id="blogs-grid-section">
+    <div class="container">
+        <div class="flex-between" style="margin-bottom: 28px;">
+            <h2 style="font-size: 24px;">All <span class="orange-highlight">Articles</span></h2>
+            <span id="blog-count-badge" style="font-size: 14px; color: var(--text-muted);">Loading articles...</span>
+        </div>
+
+        <div class="grid-3" id="public-blogs-grid">
+            <!-- Dynamically populated -->
+        </div>
+    </div>
+</section>
+
+<!-- ════════════════════════════ BLOG READER MODAL ═════════════════════════ -->
+<div class="modal-overlay" id="blog-reader-modal">
+    <div class="modal-container">
+        <button class="modal-close-btn" id="close-blog-modal-btn" aria-label="Close modal"><i class="ri-close-line"></i></button>
+
+        <div id="modal-blog-header" style="margin-bottom: 24px;">
+            <div class="flex-between" style="margin-bottom: 12px; flex-wrap: wrap; gap: 10px;">
+                <span class="badge-orange" id="modal-blog-category">Category</span>
+                <div style="font-size: 13px; color: var(--text-dim); display: flex; gap: 16px;">
+                    <span><i class="ri-calendar-line orange-highlight"></i> <span id="modal-blog-date">Date</span></span>
+                    <span><i class="ri-time-line orange-highlight"></i> <span id="modal-blog-readtime">5 min read</span></span>
+                    <span><i class="ri-eye-line orange-highlight"></i> <span id="modal-blog-views">0</span> views</span>
+                </div>
+            </div>
+            <h1 id="modal-blog-title" style="font-size: 30px; margin-bottom: 16px; line-height: 1.3;">Blog Post Title</h1>
+            <p id="modal-blog-summary" style="font-size: 16.5px; color: var(--text-muted); line-height: 1.6; border-left: 3px solid var(--orange); padding-left: 16px; margin-bottom: 20px; font-style: italic;"></p>
+            <div id="modal-blog-cover-box" style="border-radius: 16px; overflow: hidden; max-height: 380px; margin-bottom: 28px; display: none;">
+                <img id="modal-blog-cover" src="" alt="Blog Cover" style="width: 100%; height: 100%; object-fit: cover;">
+            </div>
+        </div>
+
+        <div id="modal-blog-body" style="font-size: 16px; line-height: 1.8; color: var(--text-body); margin-bottom: 32px;">
+            <!-- Article Markdown/HTML content -->
+        </div>
+
+        <div id="modal-blog-tags" style="display: flex; gap: 8px; flex-wrap: wrap; padding-top: 20px; border-top: 1px solid var(--border);">
+            <!-- Tags -->
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════════════════════ FOOTER ═══════════════════════════════════ -->
+<div id="main-footer"></div>
+
+<!-- ══════════════════════════════ SCRIPTS ══════════════════════════════════ -->
+<script src="js/theme.js"></script>
+<script src="js/animations.js"></script>
+<script src="js/components.js"></script>
+<script src="js/ai-assistant.js"></script>
+<script src="js/dynamic.js"></script>
+
+<script>
+let currentBlogs = [];
+let selectedCategory = 'all';
+
+document.addEventListener('DOMContentLoaded', () => {
+    loadPublicBlogs();
+
+    // Search event listeners
+    const searchInput = document.getElementById('blog-search-input');
+    const searchBtn = document.getElementById('blog-search-btn');
+
+    if (searchInput) {
+        searchInput.addEventListener('keyup', (e) => {
+            if (e.key === 'Enter') renderFilteredBlogs();
+        });
+    }
+    if (searchBtn) {
+        searchBtn.addEventListener('click', renderFilteredBlogs);
+    }
+
+    // Category pills
+    document.querySelectorAll('.blog-category-pill').forEach(pill => {
+        pill.addEventListener('click', (e) => {
+            document.querySelectorAll('.blog-category-pill').forEach(p => p.classList.remove('active', 'btn-primary'));
+            document.querySelectorAll('.blog-category-pill').forEach(p => p.classList.add('btn-secondary'));
+            
+            pill.classList.remove('btn-secondary');
+            pill.classList.add('active', 'btn-primary');
+            selectedCategory = pill.getAttribute('data-cat');
+            renderFilteredBlogs();
+        });
+    });
+
+    // Modal close
+    const modal = document.getElementById('blog-reader-modal');
+    const closeBtn = document.getElementById('close-blog-modal-btn');
+    if (closeBtn && modal) {
+        closeBtn.addEventListener('click', () => modal.classList.remove('active'));
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) modal.classList.remove('active');
+        });
+    }
+});
+
+async function loadPublicBlogs() {
+    try {
+        const data = await fetchData('/blogs?published=true') || [];
+        currentBlogs = data;
+        renderFilteredBlogs();
+    } catch (e) {
+        console.error("Error loading public blogs:", e);
+        const grid = document.getElementById('public-blogs-grid');
+        if (grid) {
+            grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 40px;"><p style="color: var(--text-muted);">No blog posts available yet. Check back soon!</p></div>`;
+        }
+    }
+}
+
+function renderFilteredBlogs() {
+    const grid = document.getElementById('public-blogs-grid');
+    const countBadge = document.getElementById('blog-count-badge');
+    const query = (document.getElementById('blog-search-input')?.value || '').toLowerCase().trim();
+
+    if (!grid) return;
+
+    let filtered = currentBlogs.filter(b => {
+        const matchCat = (selectedCategory === 'all') || (b.category && b.category.toLowerCase() === selectedCategory.toLowerCase());
+        const matchSearch = !query || 
+            b.title.toLowerCase().includes(query) || 
+            b.summary.toLowerCase().includes(query) || 
+            b.content.toLowerCase().includes(query) ||
+            (b.tags && b.tags.some(t => t.toLowerCase().includes(query)));
+        return matchCat && matchSearch;
+    });
+
+    if (countBadge) {
+        countBadge.textContent = `Showing ${filtered.length} article${filtered.length === 1 ? '' : 's'}`;
+    }
+
+    if (!filtered.length) {
+        grid.innerHTML = `
+            <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px;" class="glass-card">
+                <i class="ri-article-line" style="font-size: 48px; color: var(--orange); margin-bottom: 12px;"></i>
+                <h3 style="margin-bottom: 8px;">No articles found</h3>
+                <p style="color: var(--text-muted); font-size: 15px;">Try adjusting your search keywords or category filters.</p>
+            </div>
+        `;
+        return;
+    }
+
+    grid.innerHTML = filtered.map((b, i) => `
+        <div class="blog-card reveal reveal-delay-${(i % 3) + 1}">
+            <div>
+                ${b.cover_image_url ? `<img src="${b.cover_image_url}" alt="${b.title}" class="blog-card-img" loading="lazy">` : ''}
+                <div class="blog-meta-bar">
+                    <span class="badge-orange">${b.category || 'Tech'}</span>
+                    <span><i class="ri-time-line"></i> ${b.read_time || '5 min read'}</span>
+                </div>
+                <h3 class="blog-card-title">${b.title}</h3>
+                <p class="blog-card-excerpt">${(b.summary || b.content || '').slice(0, 120)}…</p>
+            </div>
+
+            <div>
+                <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px;">
+                    ${(b.tags || []).slice(0, 3).map(t => `<span class="blog-tag-pill">#${t}</span>`).join('')}
+                </div>
+                <div class="flex-between" style="border-top: 1px solid var(--border); padding-top: 14px;">
+                    <span style="font-size: 12px; color: var(--text-dim);"><i class="ri-calendar-line"></i> ${formatDate(b.created_at)}</span>
+                    <button onclick="openBlogReader('${b.id}')" class="btn-secondary" style="padding: 6px 14px; font-size: 13px;">
+                        Read Article <i class="ri-arrow-right-line"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+async function openBlogReader(id) {
+    const blog = await fetchData('/blogs/' + id);
+    if (!blog) return;
+
+    document.getElementById('modal-blog-category').textContent = blog.category || 'Article';
+    document.getElementById('modal-blog-title').textContent = blog.title;
+    document.getElementById('modal-blog-summary').textContent = blog.summary || '';
+    document.getElementById('modal-blog-date').textContent = formatDate(blog.created_at);
+    document.getElementById('modal-blog-readtime').textContent = blog.read_time || '5 min read';
+    document.getElementById('modal-blog-views').textContent = blog.views_count || 1;
+
+    const coverBox = document.getElementById('modal-blog-cover-box');
+    const coverImg = document.getElementById('modal-blog-cover');
+    if (blog.cover_image_url) {
+        coverImg.src = blog.cover_image_url;
+        coverBox.style.display = 'block';
+    } else {
+        coverBox.style.display = 'none';
+    }
+
+    // Format content body nicely with paragraph breaks
+    const bodyContainer = document.getElementById('modal-blog-body');
+    if (blog.content) {
+        const formattedHtml = blog.content.split('\n\n').map(p => `<p style="margin-bottom: 16px;">${p.replace(/\n/g, '<br>')}</p>`).join('');
+        bodyContainer.innerHTML = formattedHtml;
+    } else {
+        bodyContainer.innerHTML = `<p style="color: var(--text-muted);">Full article content coming soon.</p>`;
+    }
+
+    const tagsContainer = document.getElementById('modal-blog-tags');
+    tagsContainer.innerHTML = (blog.tags || []).map(t => `<span class="badge-orange">#${t}</span>`).join('');
+
+    document.getElementById('blog-reader-modal').classList.add('active');
+}
+
+function formatDate(isoStr) {
+    if (!isoStr) return 'Recently published';
+    try {
+        const d = new Date(isoStr);
+        return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    } catch (e) {
+        return 'Recently published';
+    }
+}
+</script>
+
+</body>
+</html>

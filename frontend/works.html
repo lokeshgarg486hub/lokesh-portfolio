@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Works & Projects — Lokesh Kumar Garg</title>
+    <meta name="description" content="AI and Data Science projects by Lokesh Kumar Garg — RAG pipelines, Agentic AI systems, analytics dashboards, and production full-stack applications.">
+
+    <link rel="icon" type="image/png" href="assets/images/favicon.png">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css">
+    <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/utilities.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body data-page="works">
+
+<div class="unique-hero-glow"></div>
+
+<!-- ══════════════ HEADER ══════════════ -->
+<div id="main-header"></div>
+
+<!-- ══════════════ PAGE HERO ══════════ -->
+<section class="section-pad page-top" id="works-hero">
+    <div class="container text-center reveal">
+        <div class="hero-accent-badge">
+            <i class="ri-folder-code-line"></i> Portfolio Showcase
+        </div>
+        <h1 style="margin-bottom: 16px;">
+            Engineered <span class="orange-gradient-text">Works &amp; Systems</span>
+        </h1>
+        <p style="font-size: 18px; color: var(--text-muted); max-width: 680px; margin: 0 auto 36px; line-height: 1.6;">
+            Production-grade Agentic AI pipelines, RAG search engines, data science dashboards, and scalable full-stack applications.
+        </p>
+
+        <!-- Search & Filter Controls -->
+        <div style="max-width: 680px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px;">
+            <div class="glass-card" style="padding: 8px 16px; display: flex; align-items: center; gap: 12px; border-radius: 50px; border: 1px solid var(--border-glow);">
+                <i class="ri-search-line" style="font-size: 20px; color: var(--gold);"></i>
+                <input type="text" id="works-search-input" placeholder="Search projects by title, domain, or technology (e.g. LangChain, FastAPI)..." style="background: transparent; border: none; outline: none; color: var(--text-white); font-size: 15px; width: 100%;">
+                <button id="works-search-btn" class="btn-primary" style="padding: 8px 20px; border-radius: 30px; font-size: 13.5px;">Search</button>
+            </div>
+
+            <!-- Domain Category Pills -->
+            <div class="flex-center" style="gap: 10px; flex-wrap: wrap;" id="works-filters">
+                <button class="filter-chip active-filter" data-filter="all">All Projects</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ══════════════ PROJECTS GRID ══════════ -->
+<section class="section-pad-sm" id="works-grid-section">
+    <div class="container">
+        <div class="flex-between" style="margin-bottom: 28px;">
+            <h2 style="font-size: 24px;">Project <span class="gold-highlight">Catalog</span></h2>
+            <span id="works-count-badge" style="font-size: 14px; color: var(--text-muted);">Loading projects...</span>
+        </div>
+
+        <div class="grid-3" id="works-grid">
+            <!-- Dynamically populated from /projects API -->
+        </div>
+    </div>
+</section>
+
+<!-- ══════════════ PROJECT DETAILS MODAL ══════════ -->
+<div class="modal-overlay" id="project-detail-modal">
+    <div class="modal-container">
+        <button class="modal-close-btn" id="close-project-modal-btn" aria-label="Close modal"><i class="ri-close-line"></i></button>
+
+        <div style="margin-bottom: 24px;">
+            <div class="flex-between" style="margin-bottom: 12px; flex-wrap: wrap; gap: 10px;">
+                <span class="badge-orange" id="modal-project-domain">Domain</span>
+                <span id="modal-project-featured" style="font-size: 13px; color: var(--gold); font-weight: 600; display: none;"><i class="ri-star-fill"></i> Featured System</span>
+            </div>
+            <h1 id="modal-project-title" style="font-size: 28px; margin-bottom: 14px; line-height: 1.3;">Project Title</h1>
+            <p id="modal-project-desc" style="font-size: 16px; color: var(--text-muted); line-height: 1.65; margin-bottom: 20px;"></p>
+            
+            <div id="modal-project-thumb-box" style="border-radius: 16px; overflow: hidden; max-height: 340px; margin-bottom: 24px; border: 1px solid var(--border-glow);">
+                <img id="modal-project-thumb" src="" alt="Project Image" style="width: 100%; height: 100%; object-fit: cover;">
+            </div>
+        </div>
+
+        <div id="modal-project-details-box" style="background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 24px; display: none;">
+            <h4 style="font-size: 16px; color: var(--gold); margin-bottom: 8px;"><i class="ri-cpu-line me-1"></i> System Architecture &amp; Highlights</h4>
+            <p id="modal-project-details" style="font-size: 15px; color: var(--text-body); line-height: 1.6; margin: 0;"></p>
+        </div>
+
+        <div style="margin-bottom: 24px;">
+            <h4 style="font-size: 15px; color: var(--text-muted); margin-bottom: 10px;">Technologies &amp; Frameworks</h4>
+            <div id="modal-project-tech" style="display: flex; gap: 8px; flex-wrap: wrap;"></div>
+        </div>
+
+        <div class="flex-between" style="border-top: 1px solid var(--border); padding-top: 20px;">
+            <a id="modal-project-github" href="#" target="_blank" rel="noopener" class="btn-secondary" style="display: inline-flex; align-items: center; gap: 8px;">
+                <i class="ri-github-line" style="font-size: 18px;"></i> View Repository
+            </a>
+            <a id="modal-project-demo" href="#" target="_blank" rel="noopener" class="btn-primary" style="display: none; align-items: center; gap: 8px;">
+                Live System Demo <i class="ri-external-link-line"></i>
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════ GITHUB CTA ══════════════ -->
+<section class="section-pad-sm" style="background: rgba(255,255,255,0.01);">
+    <div class="container">
+        <div class="glass-card text-center reveal" style="padding: 48px 32px; max-width: 720px; margin: 0 auto; border: 1px solid var(--border-glow);">
+            <i class="ri-github-fill" style="font-size: 52px; color: var(--gold); margin-bottom: 16px; display: block;"></i>
+            <h2 style="margin-bottom: 12px;">Explore Complete Code repositories</h2>
+            <p style="margin-bottom: 28px; color: var(--text-muted);">Inspect open-source repositories, agent benchmarks, fine-tuning scripts, and full deployment manifests on GitHub.</p>
+            <a href="https://github.com/lokeshgarg486hub" target="_blank" rel="noopener" class="btn-primary">
+                Visit GitHub Profile <i class="ri-external-link-line"></i>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- ══════════════ FOOTER ══════════════ -->
+<div id="main-footer"></div>
+
+<!-- ══════════════ SCRIPTS ══════════════ -->
+<script src="js/theme.js"></script>
+<script src="js/animations.js"></script>
+<script src="js/components.js"></script>
+<script src="js/ai-assistant.js"></script>
+<script src="js/dynamic.js"></script>
+
+<script>
+let allProjects = [];
+let currentFilter = 'all';
+
+document.addEventListener('DOMContentLoaded', async () => {
+    await loadProjectsData();
+
+    // Search events
+    const searchInput = document.getElementById('works-search-input');
+    const searchBtn = document.getElementById('works-search-btn');
+
+    if (searchInput) {
+        searchInput.addEventListener('keyup', (e) => {
+            if (e.key === 'Enter') renderFilteredProjects();
+        });
+    }
+    if (searchBtn) {
+        searchBtn.addEventListener('click', renderFilteredProjects);
+    }
+
+    // Modal close events
+    const modal = document.getElementById('project-detail-modal');
+    const closeBtn = document.getElementById('close-project-modal-btn');
+    if (closeBtn && modal) {
+        closeBtn.addEventListener('click', () => modal.classList.remove('active'));
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) modal.classList.remove('active');
+        });
+    }
+});
+
+async function loadProjectsData() {
+    try {
+        allProjects = await fetchData('/projects') || [];
+        buildCategoryFilterPills();
+        renderFilteredProjects();
+    } catch (e) {
+        console.error("Error fetching projects:", e);
+        const grid = document.getElementById('works-grid');
+        if (grid) {
+            grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 40px;"><p style="color: var(--text-muted);">Ensure backend API is running to load project portfolio.</p></div>`;
+        }
+    }
+}
+
+function buildCategoryFilterPills() {
+    const filterContainer = document.getElementById('works-filters');
+    if (!filterContainer || !allProjects.length) return;
+
+    const domains = [...new Set(allProjects.map(p => p.domain).filter(Boolean))];
+    
+    filterContainer.innerHTML = `
+        <button class="filter-chip active-filter" data-filter="all">All Projects</button>
+        ${domains.map(d => `<button class="filter-chip" data-filter="${d.toLowerCase()}">${d}</button>`).join('')}
+    `;
+
+    filterContainer.querySelectorAll('.filter-chip').forEach(btn => {
+        btn.addEventListener('click', () => {
+            filterContainer.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active-filter'));
+            btn.classList.add('active-filter');
+            currentFilter = btn.getAttribute('data-filter');
+            renderFilteredProjects();
+        });
+    });
+}
+
+function renderFilteredProjects() {
+    const grid = document.getElementById('works-grid');
+    const countBadge = document.getElementById('works-count-badge');
+    const query = (document.getElementById('works-search-input')?.value || '').toLowerCase().trim();
+
+    if (!grid) return;
+
+    let filtered = allProjects.filter(p => {
+        const matchCat = (currentFilter === 'all') || ((p.domain || '').toLowerCase() === currentFilter);
+        const matchSearch = !query || 
+            p.title.toLowerCase().includes(query) || 
+            (p.description || '').toLowerCase().includes(query) ||
+            (p.details || '').toLowerCase().includes(query) ||
+            (p.tech_stack || []).some(t => t.toLowerCase().includes(query));
+        return matchCat && matchSearch;
+    });
+
+    if (countBadge) {
+        countBadge.textContent = `Showing ${filtered.length} project${filtered.length === 1 ? '' : 's'}`;
+    }
+
+    if (!filtered.length) {
+        grid.innerHTML = `
+            <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px;" class="glass-card">
+                <i class="ri-folder-code-line" style="font-size: 48px; color: var(--gold); margin-bottom: 12px;"></i>
+                <h3 style="margin-bottom: 8px;">No projects found</h3>
+                <p style="color: var(--text-muted); font-size: 15px;">Try clearing your search query or choosing another domain category.</p>
+            </div>
+        `;
+        return;
+    }
+
+    grid.innerHTML = filtered.map((p, i) => `
+        <div class="glass-card reveal reveal-delay-${(i % 3) + 1}" style="display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+                <div style="border-radius: 12px; overflow: hidden; height: 190px; margin-bottom: 18px; position: relative; border: 1px solid var(--border);">
+                    <img src="${p.thumbnail_url || 'assets/images/twitter-settings.jpg'}" alt="${p.title}" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease;" loading="lazy" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'">
+                    ${p.featured ? `<span style="position: absolute; top: 10px; right: 10px;" class="badge-orange"><i class="ri-star-fill"></i> Featured</span>` : ''}
+                </div>
+                <div class="flex-between" style="margin-bottom: 10px;">
+                    <span class="badge-orange">${p.domain || 'AI System'}</span>
+                </div>
+                <h3 style="font-size: 19.5px; margin-bottom: 8px; color: var(--text-white);">${p.title}</h3>
+                <p style="font-size: 14.5px; color: var(--text-muted); margin-bottom: 16px; line-height: 1.55;">${(p.description || '').slice(0, 110)}${(p.description || '').length > 110 ? '…' : ''}</p>
+            </div>
+
+            <div>
+                <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 18px;">
+                    ${(p.tech_stack || []).slice(0, 4).map(t => `<span class="tech-chip">${t}</span>`).join('')}
+                </div>
+                <div class="flex-between" style="border-top: 1px solid var(--border); padding-top: 14px;">
+                    <button onclick="openProjectModal('${p.id}')" class="btn-secondary" style="padding: 7px 16px; font-size: 13px;">
+                        System Details <i class="ri-information-line"></i>
+                    </button>
+                    ${p.demo_link ? `<a href="${p.demo_link}" target="_blank" rel="noopener" class="orange-highlight" style="font-size: 13.5px; font-weight: 600;">Live Demo <i class="ri-external-link-line"></i></a>` : `<a href="${p.github_link || '#'}" target="_blank" rel="noopener" class="orange-highlight" style="font-size: 13.5px; font-weight: 600;"><i class="ri-github-line"></i> Code</a>`}
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+function openProjectModal(id) {
+    const project = allProjects.find(p => p.id === id);
+    if (!project) return;
+
+    document.getElementById('modal-project-domain').textContent = project.domain || 'AI Project';
+    document.getElementById('modal-project-title').textContent = project.title;
+    document.getElementById('modal-project-desc').textContent = project.description || '';
+    
+    const featBadge = document.getElementById('modal-project-featured');
+    if (project.featured) {
+        featBadge.style.display = 'inline-flex';
+    } else {
+        featBadge.style.display = 'none';
+    }
+
+    const thumbBox = document.getElementById('modal-project-thumb-box');
+    const thumbImg = document.getElementById('modal-project-thumb');
+    if (project.thumbnail_url) {
+        thumbImg.src = project.thumbnail_url;
+        thumbBox.style.display = 'block';
+    } else {
+        thumbBox.style.display = 'none';
+    }
+
+    const detailsBox = document.getElementById('modal-project-details-box');
+    const detailsText = document.getElementById('modal-project-details');
+    if (project.details) {
+        detailsText.textContent = project.details;
+        detailsBox.style.display = 'block';
+    } else {
+        detailsBox.style.display = 'none';
+    }
+
+    const techBox = document.getElementById('modal-project-tech');
+    techBox.innerHTML = (project.tech_stack || []).map(t => `<span class="badge-orange">${t}</span>`).join('');
+
+    const ghBtn = document.getElementById('modal-project-github');
+    ghBtn.href = project.github_link || '#';
+
+    const demoBtn = document.getElementById('modal-project-demo');
+    if (project.demo_link) {
+        demoBtn.href = project.demo_link;
+        demoBtn.style.display = 'inline-flex';
+    } else {
+        demoBtn.style.display = 'none';
+    }
+
+    document.getElementById('project-detail-modal').classList.add('active');
+}
+</script>
+
+<style>
+.filter-chip {
+    cursor: pointer;
+    font-size: 13.5px;
+    padding: 7px 18px;
+    font-family: var(--font-heading);
+    font-weight: 500;
+    border-radius: 50px;
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,0.03);
+    color: var(--text-muted);
+    transition: all 0.22s ease;
+}
+.filter-chip:hover,
+.filter-chip.active-filter {
+    background: rgba(245,158,11,0.16);
+    border-color: var(--gold);
+    color: var(--text-white);
+    box-shadow: 0 4px 15px rgba(245,158,11,0.2);
+}
+</style>
+
+</body>
+</html>

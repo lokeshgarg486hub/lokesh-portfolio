@@ -1,0 +1,17 @@
+# Python
+backend/venv/
+backend/__pycache__/
+backend/**/__pycache__/
+*.pyc
+
+# Secrets — never commit real credentials
+backend/.env
+
+# User-uploaded files (main.py recreates this folder automatically on startup)
+backend/uploads/*
+
+# Editor / OS junk
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

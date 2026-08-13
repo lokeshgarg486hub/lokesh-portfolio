@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skills — Lokesh Kumar Garg</title>
+    <meta name="description" content="Technical skills and expertise of Lokesh Kumar Garg — AI/ML, Python, FastAPI, LangChain, RAG, Power BI, and more.">
+
+    <link rel="icon" type="image/png" href="assets/images/favicon.png">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css">
+    <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/utilities.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body data-page="skills">
+
+<div class="unique-hero-glow"></div>
+
+<!-- ══════════════ HEADER ══════════════ -->
+<div id="main-header"></div>
+
+
+<!-- ══════════════ PAGE HERO ══════════ -->
+<section class="section-pad page-top" id="skills-hero">
+    <div class="container">
+        <div class="section-header reveal">
+            <div class="eyebrow"><i class="ri-code-s-slash-line"></i> Technical Expertise</div>
+            <h1>My <span class="orange-gradient-text">Skill Matrix</span></h1>
+            <p class="section-sub">Every tool, framework, and language I use to design, build, and ship intelligent AI-powered systems.</p>
+        </div>
+    </div>
+</section>
+
+<!-- ══════════════ SKILLS DOMAINS ══════════════ -->
+<section class="section-pad-sm" id="skills-domains">
+    <div class="container">
+        <div class="section-header reveal">
+            <div class="eyebrow"><i class="ri-brain-line"></i> Core Domains</div>
+            <h2>AI & ML <span class="orange-gradient-text">Expertise</span></h2>
+        </div>
+
+        <div class="grid-3" id="skills-grid">
+            <!-- JS populated from /skills API -->
+        </div>
+    </div>
+</section>
+
+<!-- ══════════════ HARD SKILLS BARS ══════════════ -->
+<section class="section-pad" id="skills-bars" style="background:rgba(255,255,255,0.01);">
+    <div class="container">
+        <div class="section-header reveal">
+            <div class="eyebrow"><i class="ri-bar-chart-box-line"></i> Proficiency</div>
+            <h2>Technical <span class="orange-gradient-text">Proficiency</span></h2>
+            <p class="section-sub">Self-assessed proficiency across the most critical tools in my stack.</p>
+        </div>
+
+        <div class="grid-2" id="skills-bars-grid">
+            <!-- JS populated -->
+        </div>
+    </div>
+</section>
+
+<!-- ══════════════ SOFT SKILLS ══════════════ -->
+<section class="section-pad" id="soft-skills">
+    <div class="container">
+        <div class="section-header reveal">
+            <div class="eyebrow"><i class="ri-team-line"></i> People Skills</div>
+            <h2>Soft <span class="orange-gradient-text">Skills</span></h2>
+        </div>
+        <div class="grid-4">
+            <div class="glass-card text-center reveal reveal-delay-1">
+                <div style="font-size:34px;margin-bottom:12px;">🧠</div>
+                <h4>Problem-Solving</h4>
+                <p style="font-size:14px;margin-top:8px;">Break complex AI challenges into structured, tractable solutions.</p>
+            </div>
+            <div class="glass-card text-center reveal reveal-delay-2">
+                <div style="font-size:34px;margin-bottom:12px;">🤝</div>
+                <h4>Collaboration</h4>
+                <p style="font-size:14px;margin-top:8px;">Work seamlessly across data, engineering, and product teams.</p>
+            </div>
+            <div class="glass-card text-center reveal reveal-delay-3">
+                <div style="font-size:34px;margin-bottom:12px;">⚡</div>
+                <h4>Rapid Learning</h4>
+                <p style="font-size:14px;margin-top:8px;">Adapt fast to new LLM frameworks and research breakthroughs.</p>
+            </div>
+            <div class="glass-card text-center reveal reveal-delay-4">
+                <div style="font-size:34px;margin-bottom:12px;">📢</div>
+                <h4>Communication</h4>
+                <p style="font-size:14px;margin-top:8px;">Translate technical concepts clearly for non-technical stakeholders.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ══════════════ FOOTER ══════════════ -->
+<div id="main-footer"></div>
+
+<!-- ══════════════ SCRIPTS ══════════════ -->
+<script src="js/theme.js"></script>
+<script src="js/animations.js"></script>
+<script src="js/components.js"></script>
+<script src="js/ai-assistant.js"></script>
+<script src="js/dynamic.js"></script>
+
+<script>
+const DOMAIN_ICONS = {
+    'AI/LLM':        'ri-robot-line',
+    'Machine Learning': 'ri-brain-line',
+    'Data Science':  'ri-bar-chart-2-line',
+    'Backend':       'ri-server-line',
+    'Frontend':      'ri-layout-line',
+    'Database':      'ri-database-2-line',
+    'Cloud':         'ri-cloud-line',
+    'Tools':         'ri-tools-line',
+};
+
+const HARD_SKILLS_DEFAULT = [
+    { name: 'Python',       level: 92 },
+    { name: 'LangChain / RAG', level: 87 },
+    { name: 'FastAPI',      level: 80 },
+    { name: 'SQL & PostgreSQL', level: 78 },
+    { name: 'Power BI',     level: 75 },
+    { name: 'React / Next.js', level: 70 },
+    { name: 'TensorFlow / PyTorch', level: 72 },
+    { name: 'Docker / Linux', level: 65 },
+];
+
+document.addEventListener('DOMContentLoaded', async () => {
+
+    /* ── Domain Skills Grid ── */
+    const skills = await fetchData('/skills') || [];
+    const grid = document.getElementById('skills-grid');
+
+    if (grid) {
+        if (skills.length) {
+            // Group by domain
+            const domains = {};
+            skills.forEach(s => {
+                const d = s.domain || 'General';
+                if (!domains[d]) domains[d] = [];
+                domains[d].push(s);
+            });
+
+            let i = 0;
+            grid.innerHTML = Object.entries(domains).map(([domain, domSkills]) => {
+                const icon = DOMAIN_ICONS[domain] || 'ri-code-s-slash-line';
+                i++;
+                return `
+                    <div class="glass-card reveal reveal-delay-${Math.min(i,4)}">
+                        <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;">
+                            <div style="width:44px;height:44px;border-radius:12px;background:rgba(235,93,58,0.12);border:1px solid rgba(235,93,58,0.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                                <i class="${icon} orange-highlight" style="font-size:22px;"></i>
+                            </div>
+                            <h3 style="font-size:19px;">${domain}</h3>
+                        </div>
+                        <div style="display:flex;flex-wrap:wrap;gap:8px;">
+                            ${domSkills.map(s => `<span class="badge-orange">${s.name}</span>`).join('')}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        } else {
+            // Fallback static
+            grid.innerHTML = [
+                { domain: 'AI & LLM Systems', icon: 'ri-robot-line', items: ['LangChain','LlamaIndex','RAG','Agentic AI','Groq','Ollama','Pinecone','ChromaDB'] },
+                { domain: 'Machine Learning', icon: 'ri-brain-line', items: ['TensorFlow','PyTorch','Scikit-learn','Pandas','NumPy','Matplotlib','Seaborn'] },
+                { domain: 'Data Science & Analytics', icon: 'ri-bar-chart-2-line', items: ['Power BI','Tableau','SQL','EDA','Statistics','Data Wrangling'] },
+                { domain: 'Backend Development', icon: 'ri-server-line', items: ['Python','FastAPI','Node.js','REST APIs','WebSockets','SQLAlchemy'] },
+                { domain: 'Frontend & UI', icon: 'ri-layout-line', items: ['React','Next.js','JavaScript','HTML5','CSS3','Tailwind CSS'] },
+                { domain: 'Databases & Tools', icon: 'ri-database-2-line', items: ['PostgreSQL','MongoDB','Redis','Git','Docker','Linux','VS Code'] },
+            ].map((d, i) => `
+                <div class="glass-card reveal reveal-delay-${Math.min(i+1,4)}">
+                    <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;">
+                        <div style="width:44px;height:44px;border-radius:12px;background:rgba(235,93,58,0.12);border:1px solid rgba(235,93,58,0.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                            <i class="${d.icon} orange-highlight" style="font-size:22px;"></i>
+                        </div>
+                        <h3 style="font-size:19px;">${d.domain}</h3>
+                    </div>
+                    <div style="display:flex;flex-wrap:wrap;gap:8px;">
+                        ${d.items.map(s => `<span class="badge-orange">${s}</span>`).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+    }
+
+    /* ── Proficiency Bars ── */
+    const barsGrid = document.getElementById('skills-bars-grid');
+    if (barsGrid) {
+        barsGrid.innerHTML = HARD_SKILLS_DEFAULT.map((s, i) => `
+            <div class="glass-card reveal reveal-delay-${Math.min(i+1,4)}" style="padding:20px 26px;">
+                <div class="flex-between" style="margin-bottom:10px;">
+                    <span style="font-family:var(--font-heading);font-weight:600;font-size:15px;">${s.name}</span>
+                    <span style="font-size:13px;color:var(--orange);font-weight:700;">${s.level}%</span>
+                </div>
+                <div style="height:6px;background:rgba(255,255,255,0.07);border-radius:3px;overflow:hidden;">
+                    <div style="height:100%;width:0%;background:linear-gradient(90deg,#c2410c,#eb5d3a,#f97316);border-radius:3px;transition:width 1.2s cubic-bezier(0.16,1,0.3,1) ${i*0.08}s;"
+                         data-width="${s.level}%" class="skill-bar-fill"></div>
+                </div>
+            </div>
+        `).join('');
+
+        // Animate bars on scroll
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    e.target.querySelectorAll('.skill-bar-fill').forEach(bar => {
+                        bar.style.width = bar.dataset.width;
+                    });
+                    observer.unobserve(e.target);
+                }
+            });
+        }, { threshold: 0.2 });
+        observer.observe(barsGrid);
+    }
+});
+</script>
+
+</body>
+</html>

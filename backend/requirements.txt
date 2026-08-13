@@ -1,0 +1,14 @@
+fastapi
+uvicorn
+motor
+pymongo
+pydantic
+pydantic-settings
+python-multipart
+# Pin bcrypt to 4.0.1 — passlib[bcrypt] without this pulls the latest bcrypt
+# which removed the __about__ attribute and causes an AttributeError on startup.
+bcrypt==4.0.1
+passlib[bcrypt]
+python-jose[cryptography]
+cloudinary
+resend
